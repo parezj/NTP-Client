@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29926.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ntp_client_dll", "ntp_client_dll\ntp_client_dll.vcxproj", "{D76F068D-A4A1-4BB0-941F-B5C9FBAFF372}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ntp_client_lib", "ntp_client_lib\ntp_client_lib.vcxproj", "{6E21FA4A-474A-46D1-9C88-D4F70041F4F8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ntp_client_shared", "ntp_client_shared\ntp_client_shared.vcxitems", "{CE1844D1-F6F4-40D9-85B6-530A3857450C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ntp_client_test", "ntp_client_test\ntp_client_test.vcxproj", "{F8635A97-994B-4240-8495-DFA5A15DF321}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		ntp_client_shared\ntp_client_shared.vcxitems*{6e21fa4a-474a-46d1-9c88-d4f70041f4f8}*SharedItemsImports = 4
+		ntp_client_shared\ntp_client_shared.vcxitems*{ce1844d1-f6f4-40d9-85b6-530a3857450c}*SharedItemsImports = 9
+		ntp_client_shared\ntp_client_shared.vcxitems*{d76f068d-a4a1-4bb0-941f-b5c9fbaff372}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D76F068D-A4A1-4BB0-941F-B5C9FBAFF372}.Debug|x64.ActiveCfg = Debug|x64
+		{D76F068D-A4A1-4BB0-941F-B5C9FBAFF372}.Debug|x64.Build.0 = Debug|x64
+		{D76F068D-A4A1-4BB0-941F-B5C9FBAFF372}.Debug|x86.ActiveCfg = Debug|Win32
+		{D76F068D-A4A1-4BB0-941F-B5C9FBAFF372}.Debug|x86.Build.0 = Debug|Win32
+		{D76F068D-A4A1-4BB0-941F-B5C9FBAFF372}.Release|x64.ActiveCfg = Release|x64
+		{D76F068D-A4A1-4BB0-941F-B5C9FBAFF372}.Release|x64.Build.0 = Release|x64
+		{D76F068D-A4A1-4BB0-941F-B5C9FBAFF372}.Release|x86.ActiveCfg = Release|Win32
+		{D76F068D-A4A1-4BB0-941F-B5C9FBAFF372}.Release|x86.Build.0 = Release|Win32
+		{6E21FA4A-474A-46D1-9C88-D4F70041F4F8}.Debug|x64.ActiveCfg = Debug|x64
+		{6E21FA4A-474A-46D1-9C88-D4F70041F4F8}.Debug|x64.Build.0 = Debug|x64
+		{6E21FA4A-474A-46D1-9C88-D4F70041F4F8}.Debug|x86.ActiveCfg = Debug|Win32
+		{6E21FA4A-474A-46D1-9C88-D4F70041F4F8}.Debug|x86.Build.0 = Debug|Win32
+		{6E21FA4A-474A-46D1-9C88-D4F70041F4F8}.Release|x64.ActiveCfg = Release|x64
+		{6E21FA4A-474A-46D1-9C88-D4F70041F4F8}.Release|x64.Build.0 = Release|x64
+		{6E21FA4A-474A-46D1-9C88-D4F70041F4F8}.Release|x86.ActiveCfg = Release|Win32
+		{6E21FA4A-474A-46D1-9C88-D4F70041F4F8}.Release|x86.Build.0 = Release|Win32
+		{F8635A97-994B-4240-8495-DFA5A15DF321}.Debug|x64.ActiveCfg = Debug|x64
+		{F8635A97-994B-4240-8495-DFA5A15DF321}.Debug|x64.Build.0 = Debug|x64
+		{F8635A97-994B-4240-8495-DFA5A15DF321}.Debug|x86.ActiveCfg = Debug|Win32
+		{F8635A97-994B-4240-8495-DFA5A15DF321}.Debug|x86.Build.0 = Debug|Win32
+		{F8635A97-994B-4240-8495-DFA5A15DF321}.Release|x64.ActiveCfg = Release|x64
+		{F8635A97-994B-4240-8495-DFA5A15DF321}.Release|x64.Build.0 = Release|x64
+		{F8635A97-994B-4240-8495-DFA5A15DF321}.Release|x86.ActiveCfg = Release|Win32
+		{F8635A97-994B-4240-8495-DFA5A15DF321}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {339BC5EC-6D32-463A-B783-8639EFA3518A}
+	EndGlobalSection
+EndGlobal
