@@ -37,7 +37,9 @@ switches and network technologies are highly variable. The sum of these values t
 represents the final shift of the local clock, which should ideally be
 equal to zero.
 
-<img align="center" src="https://raw.githubusercontent.com/parezj/NTP-Client/master/img/ntp_eq.png">
+<div align="center" margin="0" padding="0">
+<img src="https://raw.githubusercontent.com/parezj/NTP-Client/master/img/ntp_eq.png">
+</div>
 
 ## 2. NTP Client - Library (C++ DLL)
 
