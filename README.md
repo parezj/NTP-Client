@@ -1,12 +1,12 @@
 # NTP Client (Windows DLL/LIB + Console + CVI GUI)
  
-1. [Time Synchronization via NTP](#1-Time-Synchronization-via-NTP)
-2. [NTP Client Library (C++ DLL)](#2-NTP-Client---Library-C++-DLL)
+1. [Time Synchronization via NTP](#1-Time-Synchronization-via-NTP)  
+2. [NTP Client Library (C++ DLL)](#2-NTP-Client---Library-C++-DLL)  
    2.1 [Description](#Description)  
-   2.2 [C++ interface](#C++-interface)
-   2.3 [C interface](#C-interface)
-   2.4 [Example of Use](#Example-of-Use)
-3. [NTP client - Graphical Interface (CVI)](#3-NTP-client---Graphical-Interface-CVI)
+   2.2 [C++ interface](#C++-interface)  
+   2.3 [C interface](#C-interface)  
+   2.4 [Example of Use](#Example-of-Use)  
+3. [NTP client - Graphical Interface (CVI)](#3-NTP-client---Graphical-Interface-CVI)  
 
 ## 1. Time Synchronization via NTP
 
