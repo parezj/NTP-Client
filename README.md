@@ -75,8 +75,7 @@ std :: chrono with resolution to nanoseconds (time **t1**) or class
 high_resolution_clock (time **t1_b**).
 
 ```cpp
-typedef std::chrono::time_point<std::chrono::system_clock,
-std::chrono::nanoseconds> time_point_t;
+typedef std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> time_point_t;
 time_point_t t1 = std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now());
 auto t1_b = std::chrono::high_resolution_clock::now();
 ```
@@ -89,8 +88,8 @@ The following formulas show the calculation using this approach, all units
 variables are nanoseconds.
 
 ```cpp
-offset = [(T2 - T1) + (T3 - T4)] / 2
-delay = (**T4b** - **T1b**) - (T3 - T2)
+double offset = [(T2 - T1) + (T3 - T4)] / 2
+double delay = (T4b - T1b) - (T3 - T2)
 ```
 
 By summing the values *offset* and *delay* we get *delta*, ie the value by which
