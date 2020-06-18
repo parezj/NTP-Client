@@ -7,45 +7,16 @@
 * License:  MIT
 ***************************************/
 
-#pragma once
+#ifndef ntp_client_h
+#define ntp_client_h
 
-// targetver
-#if defined(_MSC_VER)			// Microsoft compiler
-#include <WinSDKVer.h>
-#ifdef _WIN32_WINNT
-#undef _WIN32_WINNT
-#endif
-#define _WIN32_WINNT 0x0601		// Windows 7 and higher
-#include <SDKDDKVer.h>
-#endif
-
-#if defined(_MSC_VER)
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #define EXPORT		__declspec(dllexport)
 #define IMPORT		__declspec(dllimport)
-//#define Interface __interface
-//#define CDECL		__cdecl
-#define PACKED_STRUCT(name) __pragma(pack(push, 1)) struct name __pragma(pack(pop))
-#else
-#error Unknown / unsupported platform
-#endif
 
-//Ws2_32.lib
-//Mswsock.lib
-//AdvApi32.lib
-
+#ifdef __cplusplus
 #include <chrono>
-#include <assert.h>
 #include <winsock2.h>
-#include <ws2tcpip.h>
-#include <string>
-#include <stdlib.h>
-#include <stdio.h>
-#include <ctime>
-#include <iostream>
-#include <string>
-
+#endif
 
 #define Interface struct
 
@@ -68,7 +39,7 @@ reference identifier field.The header fields are defined as follows :
 
 1                   2                   3
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 | LI | VN | Mode | Stratum | Poll | Precision |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 | Root Delay |
@@ -78,26 +49,26 @@ reference identifier field.The header fields are defined as follows :
 | Reference Identifier |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
-|                   Reference Timestamp(64)                    |
+|                   Reference Timestamp(64)                     |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
-|                   Originate Timestamp(64)                    |
+|                   Originate Timestamp(64)                     |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
-|                    Receive Timestamp(64)                     |
+|                    Receive Timestamp(64)                      |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
-|                    Transmit Timestamp(64)                    |
+|                    Transmit Timestamp(64)                     |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 | Key Identifier(optional) (32) |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 |                                                               |
-|                 Message Digest(optional) (128)               |
+|                 Message Digest(optional) (128)                |
 |                                                               |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -135,136 +106,165 @@ server for the client, in 64 - bit timestamp format.
  * REF http://www.eecis.udel.edu/~mills/database/rfc/rfc2030.txt
 
 	offset = [(T2 - T1) + (T3 - T4)] / 2
-	delay = (T4 - T1) - (T3 - T2)
+	delay  =  (T4 - T1) - (T3 - T2)
 
  */
 
-
-namespace CTU
+#ifdef __cplusplus
+namespace CTU {	namespace VIN { namespace NTP_client
 {
-    namespace VIN
-    {
-        namespace NTP_client
-        {
-			typedef std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> time_point_t;
+#endif
+	struct TimePt 
+	{
+		int tm_nsec;			/* nano seconds, range 0 to 999     */
+		int tm_usec;			/* micro seconds, range 0 to 999    */
+		int tm_msec;			/* mili seconds, range 0 to 999     */
+		int tm_sec;				/* seconds, range 0 to 59           */
+		int tm_min;				/* minutes, range 0 to 59           */
+		int tm_hour;			/* hours, range 0 to 23             */
+		int tm_mday;			/* day of the month, range 1 to 31  */
+		int tm_mon;				/* month, range 0 to 11             */
+		int tm_year;			/* The number of years since 1900   */
+	};
 
-			class Result
-			{
-			public:
-				time_point_t time;
-				double delay_ns;
-				double offset_ns;
-				double jitter_ns;
-				double delta_ns;
-			};
-			typedef Result result_t;
+	struct Metrics
+	{ 
+		double delay_ns;		/* delay from transporting packet through network */
+		double offset_ns;		/* offset from the server time */
+		double jitter_ns;		/* network jitter accumulated in time when calling sync */
+		double delta_ns;		/* actual difference between server and client time */
+	};
 
-			enum Status : int16_t
-			{
-				OK = 0,
-				UNKNOWN_ERR = 1,
-				INIT_WINSOCK_ERR = 2,
-				CREATE_SOCKET_ERR = 3,
-				SEND_MSG_ERR = 4,
-				RECEIVE_MSG_ERR = 5,
-				RECEIVE_MSG_TIMEOUT = 6,
-				SET_WIN_TIME_ERR = 7,
-				ADMIN_RIGHTS_NEEDED = 8
-			};
-			typedef Status status_t;
+	struct Result
+	{
+		struct TimePt time;		/* plain C style struct time point with actual time*/
+		struct Metrics mtr;		/* metrics values with other relevant data */
+	};
 
-			const char status_s[9][50] = { "OK", "Unknown Error", "Init Winsock Error", "Create Socket Error", "Send Message Error",
-				"Receive Message Error", "Recive Message Timeout", "Set Windows Time Error", "Admin Rights Needed" };
+#ifdef __cplusplus
+	typedef std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> time_point_t;
 
-			Interface IClient
-			{
-				virtual status_t query(const char* hostname, result_t** result_out) = 0;
-				virtual status_t query_and_sync(const char* hostname, result_t** result_out) = 0;
-				virtual ~IClient() {};
-			};
-			typedef IClient* HNTP;
-			//typedef Client* HNTP; // TODO check if works
+	class ResultEx
+	{
+	public:
+		time_point_t time;		/* time point class with actual time */
+		Metrics mtr;			/* metrics values with other relevant data */
+	};
+#endif
 
-			extern "C" EXPORT HNTP CDECL Client__create(void);
-			extern "C" EXPORT void CDECL Client__close(HNTP self);
-			extern "C" EXPORT status_t CDECL Client__query(HNTP self, const char* hostname, result_t** result_out);
-			extern "C" EXPORT status_t CDECL Client__query_and_sync(HNTP self, const char* hostname, result_t** result_out);
+	enum Status : int16_t
+	{
+		OK = 0,
+		UNKNOWN_ERR = 1,
+		INIT_WINSOCK_ERR = 2,
+		CREATE_SOCKET_ERR = 3,
+		SEND_MSG_ERR = 4,
+		RECEIVE_MSG_ERR = 5,
+		RECEIVE_MSG_TIMEOUT = 6,
+		SET_WIN_TIME_ERR = 7,
+		ADMIN_RIGHTS_NEEDED = 8
+	};
 
-			// static
-			extern "C" EXPORT void CDECL Client__print_info(result_t* result);
-			extern "C" EXPORT void CDECL Client__get_status_str(status_t status, char* str_out);
-			extern "C" EXPORT void CDECL Client__extract_time_point(time_point_t tp, int& y, int& m, int& d, int& hr, int& min,
-				int& sec, int& ms, int& us, int& ns);
+	typedef void* HNTP;
 
+#ifdef __cplusplus
+	extern "C" {
+#endif 
+	/* object lifecycle */
+	EXPORT HNTP __cdecl Client__create(void);
+	EXPORT void __cdecl Client__close(HNTP self);
 
-			class Packet				 // Total: 384 bits or 48 bytes.
-			{
-			public:
-				uint8_t li_vn_mode;      //  8 bits. li, vn, and mode.
-										 //    -li   2 bits. Leap indicator.
-										 //    -vn   3 bits. Version number of the protocol. 3,4
-										 //    -mode 3 bits. Client will pick mode 3 for client.
+	/* main NTP server query functions */
+	EXPORT enum Status __cdecl Client__query(HNTP self, const char* hostname, struct Result** result_out);
+	EXPORT enum Status __cdecl Client__query_and_sync(HNTP self, const char* hostname, struct Result** result_out);
 
-				uint8_t stratum;         //  8 bits. Stratum level of the local clock.
-				uint8_t poll;            //  8 bits. Maximum interval between successive messages.
-				uint8_t precision;       //  8 bits. Precision of the local clock.
-				uint32_t rootDelay;      // 32 bits. Total round trip delay time.
-				uint32_t rootDispersion; // 32 bits. Max error aloud from primary clock source.
+	/* helper functions */
+	EXPORT void __cdecl Client__format_info_str(struct Result* result, char* str_out);
+	EXPORT void __cdecl Client__get_status_str(enum Status status, char* str_out);
+	EXPORT void __cdecl Client__free_result(struct Result* result);
+#ifdef __cplusplus      
+	}
 
-				uint32_t refId;          // 32 bits. Reference clock identifier.
-				uint32_t refTm_s;        // 32 bits. Reference time-stamp seconds.
-				uint32_t refTm_f;        // 32 bits. Reference time-stamp fraction of a second.
+	Interface IClient
+	{
+		virtual Status query(const char* hostname, ResultEx** result_out) = 0;
+		virtual Status query_and_sync(const char* hostname, ResultEx** result_out) = 0;
+		virtual ~IClient() {};
+	};
 
-				uint32_t origTm_s;       // 32 bits. Originate time-stamp seconds. = t1
-				uint32_t origTm_f;       // 32 bits. Originate time-stamp fraction of a second.
+	class Packet				 // Total: 384 bits or 48 bytes.
+	{
+	public:
+		uint8_t li_vn_mode;      //  8 bits. li, vn, and mode.
+								 //    -li   2 bits. Leap indicator.
+								 //    -vn   3 bits. Version number of the protocol. 3,4
+								 //    -mode 3 bits. Client will pick mode 3 for client.
 
-				uint32_t rxTm_s;         // 32 bits. Received time-stamp seconds. = t2
-				uint32_t rxTm_f;         // 32 bits. Received time-stamp fraction of a second.
+		uint8_t stratum;         //  8 bits. Stratum level of the local clock.
+		uint8_t poll;            //  8 bits. Maximum interval between successive messages.
+		uint8_t precision;       //  8 bits. Precision of the local clock.
+		uint32_t rootDelay;      // 32 bits. Total round trip delay time.
+		uint32_t rootDispersion; // 32 bits. Max error aloud from primary clock source.
 
-				uint32_t txTm_s;         // 32 bits. Transmit time-stamp seconds. = t3
-				uint32_t txTm_f;         // 32 bits. Transmit time-stamp fraction of a second.
-			};
+		uint32_t refId;          // 32 bits. Reference clock identifier.
+		uint32_t refTm_s;        // 32 bits. Reference time-stamp seconds.
+		uint32_t refTm_f;        // 32 bits. Reference time-stamp fraction of a second.
 
-			class Client : public IClient
-			{
-			protected:
+		uint32_t origTm_s;       // 32 bits. Originate time-stamp seconds. = t1
+		uint32_t origTm_f;       // 32 bits. Originate time-stamp fraction of a second.
 
-			public:
-				Client();
-				virtual ~Client();
+		uint32_t rxTm_s;         // 32 bits. Received time-stamp seconds. = t2
+		uint32_t rxTm_f;         // 32 bits. Received time-stamp fraction of a second.
 
-				virtual status_t query(const char* hostname, result_t** result_out);
-				virtual status_t query_and_sync(const char* hostname, result_t** result_out);
+		uint32_t txTm_s;         // 32 bits. Transmit time-stamp seconds. = t3
+		uint32_t txTm_f;         // 32 bits. Transmit time-stamp fraction of a second.
+	};
 
-				static void print_info(result_t* result);
-				static void get_status_str(status_t status, char* str);
-				static void extract_time_point(time_point_t tp, int& y, int& m, int& d, int& hr,
-					int& min, int& sec, int& ms, int& us, int& ns) noexcept;
+	class Client : public IClient
+	{
+	protected:
 
-			private:
-				WSADATA wsa;
-				struct sockaddr_in si_addr;
-				int s, slen;
-				char ans[NTP_PACKET_LEN];
-				char msg[NTP_PACKET_LEN];
-				char host[STR_MAX_SIZE];
-				Packet* packet;
+	public:
+		Client();
+		virtual ~Client();
 
-				status_t init(const char* hostname);
-				status_t query();
-				status_t set_win_clock(time_point_t tm);
+		virtual Status query(const char* hostname, ResultEx** result_out);
+		virtual Status query_and_sync(const char* hostname, ResultEx** result_out);
 
-				double offset_ns;
-				double delay_ns;
-				time_point_t time;
-				double jitter_ns;
-				double delay_sum_ns;
-				double prev_delay;
+		static void format_info_str(Result* result, char* str);
+		static void format_info_str(ResultEx* result, char* str);
+		static void get_status_str(Status status, char* str);
+		static void time_pt_class_to_struct(time_point_t tp, TimePt& time_pt);
+		static void extract_time_point(time_point_t tp, int& y, int& m, int& d, int& hr,
+			int& min, int& sec, int& ms, int& us, int& ns) noexcept;
 
-				double delay_ringbuff [JITTER_WINDOW];
-				int ringbuff_front = 0;
-				int ringbuff_count = 0;
-			};
-		}     
-    }
-}
+	private:
+		WSADATA wsa;
+		struct sockaddr_in si_addr;
+		int s, slen;
+		char ans[NTP_PACKET_LEN];
+		char msg[NTP_PACKET_LEN];
+		char host[STR_MAX_SIZE];
+		Packet* packet;
+
+		enum Status init(const char* hostname);
+		enum Status query();
+		enum Status set_win_clock(time_point_t tm);
+
+		double offset_ns = 0;
+		double delay_ns = 0;
+		time_point_t time;
+		double jitter_ns = 0;
+		double delay_sum_ns = 0;
+		double prev_delay = 0;
+
+		double delay_ringbuff [JITTER_WINDOW];
+		int ringbuff_front = 0;
+		int ringbuff_count = 0;
+	};
+
+	const char status_s[9][50] = { "OK", "Unknown Error", "Init Winsock Err", "Create Socket Err", "Tx Message Err",
+		"Rx Msg Err", "Rx Msg Timeout", "Set Win Time Err", "Admin Rights Needed" };
+}}}
+#endif
+#endif

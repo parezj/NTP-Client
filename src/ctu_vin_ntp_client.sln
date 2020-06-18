@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ntp_client_lib", "ntp_clien
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ntp_client_shared", "ntp_client_shared\ntp_client_shared.vcxitems", "{CE1844D1-F6F4-40D9-85B6-530A3857450C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ntp_client_test", "ntp_client_test\ntp_client_test.vcxproj", "{F8635A97-994B-4240-8495-DFA5A15DF321}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ntp_client_test", "ntp_client_console\ntp_client_console.vcxproj", "{F8635A97-994B-4240-8495-DFA5A15DF321}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
